@@ -144,8 +144,8 @@ export default {
         endTime: this.timeValue.endTime,
       }
       getMapData(p).then(r => {
-        console.log("get")
         let hasDeviceData = r.data
+        console.log("data:\n", hasDeviceData)
         getProvinceJSON(params.areaCode).then(res => {
           this.$echarts.registerMap(params.areaName, res);
           let arr = [];
