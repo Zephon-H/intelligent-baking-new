@@ -45,7 +45,7 @@ export default {
   name: "index",
   data() {
     return {
-      searchData: [],
+      // searchData: [],
       value: '',
       search: '',
       currentPage: 1,
@@ -77,16 +77,16 @@ export default {
   components: {
     DataShow
   },
-  props: ['change', 'deviceID'],
+  props: ['change', 'searchData'],
   watch: {
     change: function (val) {
-      val // 没用
-      let timeValue = this.$store.state.homePageTimeValue
-      this.searchData = {
-        startTime: timeValue[0],
-        endTime: timeValue[1],
-        deviceID: this.deviceID
-      }
+      // let timeValue = this.$store.state.homePageTimeValue
+      console.log("searchData", this.searchData)
+      // this.searchData = {
+      //   startTime: timeValue[0],
+      //   endTime: timeValue[1],
+      //   deviceID: this.deviceID
+      // }
       this.dataList = []
       deviceTemperatureHumidDataRequest(this, val)
     }

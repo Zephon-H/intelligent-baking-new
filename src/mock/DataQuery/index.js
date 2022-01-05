@@ -2,13 +2,13 @@ import Mock from 'mockjs'
 
 let params = Mock.mock({ // 数据池
     options: [{
-        value: 'yunnan',
+        value: '650000',
         label: '云南省',
         children: [{
-            value: 'kunming',
+            value: '650100',
             label: '昆明市',
             children: [{
-                value: 'dongchuanqu',
+                value: '654100',
                 label: '东川区',
                 children: [{
                     value: '10001',
@@ -19,23 +19,17 @@ let params = Mock.mock({ // 数据池
                 }
                 ]
             }, {
-                value: 'jinning',
-                label: '晋宁县'
-            }, {
-                value: 'anning',
+                value: '650300',
                 label: '安宁市'
             }, {
-                value: 'xishan',
+                value: '650032',
                 label: '西山区'
             }]
         }, {
-            value: 'lijiang',
+            value: '674100',
             label: '丽江市',
-            children: [{
-                value: 'gucheng',
-                label: '古城区'
-            }, {
-                value: 'yongsheng',
+            children: [ {
+                value: '674201',
                 label: '永胜县'
             }]
         }]

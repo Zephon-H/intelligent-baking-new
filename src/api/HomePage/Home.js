@@ -97,14 +97,15 @@ export function dataMonitoringRequest(obj, params) {
 
 // 用到
 export function deviceTemperatureHumidDataRequest(obj, params){
-    console.log("param",params)
-    console.log(params);
-    let p = {
-        deviceId: 0
-        // startTime: params[0],
-        // endTime: params[1],
-        // deviceId: params[2],
-    }
+    // console.log("param",params)
+    console.log("条件查找，请求参数需替换", params);
+    let p = params
+    // let p = {
+    //     deviceId: 0
+    //     // startTime: params[0],
+    //     // endTime: params[1],
+    //     // deviceId: params[2],
+    // }
     let dataDeviceDetailRequestUrl = url + '/HomePage/Home/DeviceDataDetail'
     let temperature1 = [], temperature2 = [], humidity1 = [], humidity2 = [], run_time = []
     request.post(dataDeviceDetailRequestUrl, p).then(res => {

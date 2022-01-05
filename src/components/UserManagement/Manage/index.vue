@@ -41,12 +41,12 @@
                   <option value="女">女</option>
                 </select>
               </td>
-              <td style="width: 11rem" class="center">
-                <select name="gender" v-model="item.jurisdiction" class="center user-input">
-                  <option value="0">管理员</option>
-                  <option value="1">VIP</option>
-                </select>
-              </td>
+<!--              <td style="width: 11rem" class="center">-->
+<!--                <select name="gender" v-model="item.jurisdiction" class="center user-input">-->
+<!--                  <option value="0">管理员</option>-->
+<!--                  <option value="1">VIP</option>-->
+<!--                </select>-->
+<!--              </td>-->
               <td style="width: 9rem" class="center">
                 <button class="center user-list-edit-btn" @click="userSubmit(index)">提交</button>
                 <button style="color: red;border: 0.06rem solid red;" class="center user-list-edit-btn"
@@ -64,7 +64,7 @@
               <td style="width: 9rem" class="center">{{ item.nname }}</td>
               <td style="width: 10rem" class="center">{{ item.number }}</td>
               <td style="width: 9rem" class="center">{{ item.gender }}</td>
-              <td style="width: 10rem" class="center">{{ item.jurisdiction == 0 ? '管理员' : 'VIP' }}</td>
+<!--              <td style="width: 10rem" class="center">{{ item.jurisdiction == 0 ? '管理员' : 'VIP' }}</td>-->
               <td style="width: 9rem" class="center">
                 <button class="center user-list-edit-btn" @click="userEdit(index)">编辑</button>
                 <button style="color: red;border: 0.06rem solid red;" class="center user-list-edit-btn"
@@ -91,7 +91,7 @@ export default {
       //通过输入ID查找用户_id
       inputId: '',
       //从localstorege读取用户权限
-      jurisdiction: JSON.parse(localStorage.getItem('user')).jurisdiction
+      // jurisdiction: JSON.parse(localStorage.getItem('user')).jurisdiction
     }
   },
   methods: {

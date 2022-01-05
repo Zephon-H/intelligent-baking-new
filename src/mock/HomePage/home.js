@@ -6,16 +6,26 @@ import Mock from 'mockjs'
 // })
 let provinceParams = Mock.mock(
     {
-        location: '672500001', // 邮编
+        location: '650000', // 邮编
         device_number: 600,
         children: [
             {
-                location: 'xxxxx',
-                device_number: 100
+                location: '650100',
+                device_number: 100,
+                children: [
+                    {
+                        location: '654100',
+                        device_number: 20,
+                    },
+                    {
+                        location: '650041',
+                        device_number: 80,
+                    }
+                ]
             },
             {
-                location: 'xxxxx',
-                device_number: 823
+                location: '674100',
+                device_number: 500
             }]
     })
 // let provinceParams = Mock.mock({ // 数据池
@@ -23,10 +33,10 @@ let provinceParams = Mock.mock(
 //     "普洱市": {"total": 200},
 //     "丽江市": {"total": 200, "abnormal": 7}
 // })
-let cityParams = Mock.mock({
-    "东川区": {"total": 340},
-    "晋宁县": {"total": 260, "abnormal": 3}
-})
+// let cityParams = Mock.mock({
+//     "东川区": {"total": 340},
+//     "晋宁县": {"total": 260, "abnormal": 3}
+// })
 
 
 let deviceData = Mock.mock({
@@ -45,10 +55,10 @@ export default {
         code: 200,
         data: provinceParams
     }),
-    mapDataCity: () => ({
-        code: 200,
-        data: cityParams
-    }),
+    // mapDataCity: () => ({
+    //     code: 200,
+    //     data: cityParams
+    // }),
     deviceData: () => ({
         code: 200,
         data: deviceData

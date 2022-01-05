@@ -1,4 +1,4 @@
-import {Switch, Table, TableColumn, Button, Pagination, Popconfirm, Option, Input, DatePicker, TimePicker, Cascader, Message, MessageBox,Select} from 'element-ui'
+import {Tooltip, Switch, Table, TableColumn, Button, Pagination, Popconfirm, Option, Input, DatePicker, TimePicker, Cascader, Message, MessageBox,Select} from 'element-ui'
 import Vue from 'vue'
 import 'element-ui/lib/theme-chalk/index.css';
 
@@ -14,6 +14,7 @@ Vue.use(Select)
 Vue.use(DatePicker)
 Vue.use(TimePicker)
 Vue.use(Cascader)
+Vue.use(Tooltip)
 Vue.component(Message.name, Message)
 
 

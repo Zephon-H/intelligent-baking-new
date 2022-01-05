@@ -460,6 +460,7 @@ export default {
   props: ['searchData'],
   watch: {
     searchData:function(val){
+      console.log("ss:", val)
       deviceTemperatureHumidDataRequest(this, val)
     },
     //监听homePageDelay（数据时延）并及时响应  关闭定时器并重新按时延开启定时器
@@ -475,7 +476,6 @@ export default {
     }
   },
   mounted() {
-
     var resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize'
     window.addEventListener(resizeEvt, this.resizeHandle, false);
     document.addEventListener('DOMContentLoaded', this.resizeHandle, false);

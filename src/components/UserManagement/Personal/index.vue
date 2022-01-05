@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import {changeUserInfo} from '../../../api/UserManagement'
+import {changeUserInfo} from '@/api/UserManagement'
 export default {
   name: "index",
   data() {

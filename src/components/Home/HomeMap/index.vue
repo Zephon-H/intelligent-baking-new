@@ -13,7 +13,7 @@ import {getChinaJson, getProvinceJSON, getCityJSON, getMapData} from "@/api/get-
 import {cityProvincesMap} from '@/config/cityProvincesMap'
 import {mapOption} from '@/config/mapOption'
 import {mapState} from "vuex";
-
+const postcodes = require("/public/static/map/postcode.json")
 
 export default {
   name: "china",
@@ -35,6 +35,8 @@ export default {
       areaCode: '530000', // 当前行政区划
       areaLevel: 'city', // 当前级别
       timeValue: this.$store.state.homePageTimeValue,
+      deviceData: [],
+      position2postcode: {}
     }
   },
   mounted() {
@@ -59,15 +61,17 @@ export default {
   methods: {
     // 初次加载绘制地图
     initEcharts() {
-      if (document.getElementById("map")) {
-        //地图容器
-        this.chart = this.$echarts.init(document.getElementById('map'));
-      }
       // if (this.areaCode === '000000') {
       //   this.requestGetChinaJson();
       // } else {
+      if (document.getElementById("map")) {
+        //地图容器
+        console.log(document.getElementById("map"))
+        this.chart = this.$echarts.init(document.getElementById('map'));
+      }
       this.requestGetProvinceJSON({areaName: this.areaName, areaCode: this.areaCode})
-      console.log(this.deepTree)
+      // console.log(this.deepTree)
+
       // }
     },
     // 地图点击
@@ -83,7 +87,6 @@ export default {
         if (this.special.indexOf(params.seriesName) >= 0) {
           return;
         } else {
-          console.log("params", params)
           this.areaCode = this.areaMap[params.name];
           this.areaLevel = params.data.areaLevel;
           //显示县级地图
@@ -144,8 +147,14 @@ export default {
         endTime: this.timeValue.endTime,
       }
       getMapData(p).then(r => {
-        let hasDeviceData = r.data
-        console.log("data:\n", hasDeviceData)
+        this.deviceData = r.data
+        let hasDeviceData = this.deviceData
+        let t = {}
+        hasDeviceData["children"].forEach(child=> {
+          t[String(postcodes[child.location])] = {"total": child["device_number"]}
+          this.position2postcode[postcodes[child.location]] = child.location
+        })
+        hasDeviceData = t
         getProvinceJSON(params.areaCode).then(res => {
           this.$echarts.registerMap(params.areaName, res);
           let arr = [];
@@ -178,15 +187,27 @@ export default {
     },
 // 加载市级地图
     requestGetCityJSON(params) {
-      console.log("p",params)
       this.areaLevel = params.areaLevel;
-      let p = {
-        areaCode: params.areaCode,
-        startTime: this.timeValue.startTime,
-        endTime: this.timeValue.endTime,
-      }
-      getMapData(p).then(r => {
-        let hasDeviceData = r.data
+      let hasDeviceData = {}
+      let currPostcode = this.position2postcode[params.areaName]
+      this.deviceData.children.forEach(c =>{
+        if(c.location===currPostcode){
+          if(!c.children){
+            hasDeviceData = null
+            return
+          }
+          c.children.forEach(cc => {
+            hasDeviceData[String(postcodes[cc.location])]={"total": cc["device_number"]}
+          })
+        }
+      })
+      console.log(hasDeviceData)
+        // let t = {}
+        // hasDeviceData["children"].forEach(child=>{
+        //   t[String(postcodes[child.location])]={"total": child["device_number"]}}
+        // )
+        // hasDeviceData = t
+      if(hasDeviceData) {
         getCityJSON(params.areaCode).then(res => {
           this.$echarts.registerMap(params.areaName, res);
           let arr = [];
@@ -212,7 +233,8 @@ export default {
           this.deepTree.push({mapData: arr, params: params});
           this.renderMap(params.areaName, arr);
         });
-      })
+        // })
+      }
     }
     ,
     renderMap(map, data) {

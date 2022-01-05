@@ -3,13 +3,27 @@
     <div class="data-analysis">
       <div class="location-search">
         <el-cascader class="location-select"
-                     placeholder="输入可搜索"
+                     placeholder="点击或输入搜索设备"
                      :options="options"
                      v-model="value"
+                     :show-all-levels="false"
                      filterable></el-cascader>
+        <!--        <el-input-number v-model="num" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>-->
+        <el-tooltip class="item" effect="dark" content="可输入单个数字或范围，若输入范围则用横线隔开，如10-20" placement="top">
+          <el-input v-model="dryBallTemp" placeholder="干球温度"/>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="可输入单个数字或范围，若输入范围则用横线隔开，如10-20" placement="top">
+          <el-input v-model="dryBallTarget" placeholder="干球目标"/>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="可输入单个数字或范围，若输入范围则用横线隔开，如10-20" placement="top">
+          <el-input v-model="wetBallTemp" placeholder="湿球温度"/>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="可输入单个数字或范围，若输入范围则用横线隔开，如10-20" placement="top">
+          <el-input v-model="wetBallTarget" placeholder="湿球目标"/>
+        </el-tooltip>
         <button class="query" @click="getData">查询</button>
       </div>
-      <DataAnalysis class="view-data-analysis" :change="change" :deviceID="deviceID"/>
+      <DataAnalysis class="view-data-analysis" :change="change" :searchData="searchData"/>
     </div>
   </div>
 </template>
@@ -22,7 +36,7 @@ import {mapState} from "vuex";
 
 export default {
   name: "index",
-  components:{
+  components: {
     DataAnalysis
   },
   data() {
@@ -31,20 +45,58 @@ export default {
       options: [],
       change: 1,
       deviceID: "0",
-      timeValue: this.$store.state.homePageTimeValue
+      timeValue: this.$store.state.homePageTimeValue,
+      wetBallTarget: "",
+      wetBallTemp: "",
+      dryBallTarget: "",
+      dryBallTemp: "",
+      searchData: {},
     }
   },
   methods: {
     getData() {
       this.change = -this.change
-      this.deviceID = this.value[this.value.length-1]
+      this.deviceID = this.value[this.value.length - 1]
       // alert("搜索")
+      let dryBallTempList = []
+      if (this.dryBallTemp.indexOf("-") !== -1) {
+        dryBallTempList = this.dryBallTemp.split("-")
+      } else {
+        dryBallTempList = [this.dryBallTemp, this.dryBallTemp]
+      }
+      let dryBallTargetList = []
+      if (this.dryBallTarget.indexOf("-") !== -1) {
+        dryBallTargetList = this.dryBallTarget.split("-")
+      } else {
+        dryBallTargetList = [this.dryBallTarget, this.dryBallTarget]
+      }
+      let wetBallTempList = []
+      if (this.dryBallTemp.indexOf("-") !== -1) {
+        wetBallTempList = this.wetBallTemp.split("-")
+      } else {
+        wetBallTempList = [this.wetBallTemp, this.wetBallTemp]
+      }
+      let wetBallTargetList = []
+      if (this.dryBallTarget.indexOf("-") !== -1) {
+        wetBallTargetList = this.wetBallTarget.split("-")
+      } else {
+        wetBallTargetList = [this.wetBallTarget, this.wetBallTarget]
+      }
+      this.searchData = {
+        "equipment_No": this.deviceID,
+        "dryBallTemp": dryBallTempList,
+        "dryBallTarget": dryBallTargetList,
+        "wetBallTemp": wetBallTempList,
+        "wetBallTarget": wetBallTargetList,
+        startTime: this.timeValue["startTime"],
+        endTime: this.timeValue["endTime"]
+      }
     }
   },
-  computed:{
+  computed: {
     ...mapState(['homePageTimeValue'])
   },
-  watch:{
+  watch: {
     homePageTimeValue: {
       handler() {
         this.timeValue = this.homePageTimeValue
@@ -83,10 +135,12 @@ export default {
 .location-select {
   width: 60rem;
 }
-
+.item{
+  margin-left: 1rem;
+}
 .query {
-  height: 2.4rem;
-  width: 4rem;
+  height: 40px;
+  width: 50rem;
   display: flex;
   border: none;
   background: #1890ff;
