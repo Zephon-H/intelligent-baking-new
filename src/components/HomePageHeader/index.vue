@@ -24,7 +24,7 @@
         </el-option>
       </el-select>
     </div>
-    <router-link to="/LoginPage" class="header-text-quit">退出</router-link>
+    <router-link @click.native="quit()" to="/LoginPage"  class="header-text-quit">退出</router-link>
   </div>
 </template>
 <script>
@@ -56,6 +56,7 @@ export default {
     quit() {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
+      console.log("storage:", localStorage)
       this.$router.push('/LoginPage')
     },
     initOptions() {

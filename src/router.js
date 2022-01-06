@@ -38,6 +38,9 @@ const router = new Router(({
         {
             path: '/HomePage',
             component: HomePage,
+            meta: {
+                requireAuth: true
+            },
             children: [
                 {
                     path: '/HomePage/DeviceManagement',
@@ -60,7 +63,7 @@ const router = new Router(({
                     redirect: '/HomePage/Home'
                 }]
         }
-]
+    ]
 }))
 
 export default router

@@ -4,7 +4,7 @@ let params =  Mock.mock({ // 数据池
     "user":"10010101",
     "gender":"男",
     "name":"张三",
-    "nname":"这是一个用户名",
+    "nname":"华东师范大学用户",
     "phone":"13112860101",
     "token":"token123xckjvqjwoierdslkflasdlfaooqrwe"
 })
