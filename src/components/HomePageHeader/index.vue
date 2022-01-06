@@ -5,7 +5,7 @@
     </div>
     <div class="selector-container">
       <div style="font-size: 1.1rem">时间选择：</div>
-      <el-select v-model="timeValue.startTime" @change="changeSelection">
+      <el-select  v-model="timeValue.startTime" @change="changeSelection">
         <el-option
             v-for="item in options"
             :key="item"
@@ -90,6 +90,7 @@ export default {
 }
 
 .selector-container {
+  height: 100%;
   display: flex;
   flex-direction: row;
   width: 76.6%;

@@ -1,24 +1,37 @@
 <template>
   <div>
-    <div style="width: 79rem;margin: 2.6rem 6.41rem 2.63rem 5.06rem;background: white">
+    <div style="width: 87rem;margin: 2.6rem 6.41rem 2.63rem 5.06rem;background: white">
       <div class="user-all">
-        <Personal/>
-<!--        <Manage v-if="this.jurisdiction==0" />-->
-        <Pwd/>
+      <Personal/>
       </div>
+        <el-tabs style="border-top: none;" type="border-card">
+          <el-tab-pane label="修改信息">
+            <UserManagement/>
+          </el-tab-pane>
+          <el-tab-pane label="修改密码">配置管理</el-tab-pane>
+        </el-tabs>
+<!--        <Personal1/>-->
+<!--&lt;!&ndash;        <Manage v-if="this.jurisdiction==0" />&ndash;&gt;-->
+<!--        <Pwd/>-->
+<!--      </div>-->
     </div>
   </div>
 </template>
 
 <script>
 // import Manage from '@/components/UserManagement/Manage'
-import Personal from '@/components/UserManagement/Personal'
-import Pwd from '@/components/UserManagement/Pwd'
+// import Personal1 from '@/components/UserManagement/Personal1'
+// import Pwd from '@/components/UserManagement/Pwd'
+import UserManagement from "@/components/UserManagement/UserManagement";
+import Personal from "@/components/UserManagement/Personal";
 export default {
   name: "index",
   components:{
+    UserManagement,
     // Manage,
-    Personal,Pwd},
+    Personal,
+    // Pwd
+  },
   data(){
     return{
       // jurisdiction:JSON.parse(localStorage.getItem('bdi_iot_user')).jurisdiction
@@ -29,6 +42,6 @@ export default {
 
 <style scoped>
 .user-all{
-  padding: 3rem 3rem 3rem 3rem;
+  padding: 1rem 3rem 1rem 3rem;
 }
 </style>

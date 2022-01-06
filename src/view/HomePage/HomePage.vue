@@ -33,7 +33,7 @@ export default {
 }
 
 .header {
-  height: 2rem;
+  height: 4rem;
   width: 100rem;
   background: #ffffff;
   margin: 0 0 0 0;

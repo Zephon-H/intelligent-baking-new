@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div class="row" style="border-bottom: 0.1rem solid #F1F1F3;padding-bottom: 2rem">
+  <div class="row" >
     <img src="@/assets/头像.jpg" alt="用户头像" class="user-img">
     <div class="col" style="margin:0 0 0 2rem;">
       <input type="text" class="user-nname" style="width: 8rem" v-model="user.nname" v-if="ifEdit"/>
