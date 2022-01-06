@@ -1,8 +1,8 @@
 <template>
 <div>
   <div class="menu-icon" style="display: flex; flex-direction: row; margin-top: 0.26rem">
-<!--    <img src="@/assets/sztu.png" class="school" />-->
-    <div style="font-size: 1.3rem">IBP-IoT</div>
+    <img src="@/assets/leaf.png" class="school" />
+    <div style="font-size: 1.3rem; text-align: center">IBP-IoT</div>
   </div>
   <router-link v-for="item in Menus" class="menu-list" :to="item.path" :key="item.index" active-class="menu-list-active">
     <img class="list-icon" :src="item.src" />{{ item.name }}

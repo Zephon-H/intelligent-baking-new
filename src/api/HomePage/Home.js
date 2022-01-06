@@ -177,16 +177,31 @@ export function deviceTemperatureHumidDataRequest(obj, params){
 //     })
 // }
 //
-
+const postcodes = require("/public/static/map/postcode.json")
 export function queryDataRequest(obj, params) {
     // console.log("query", params)
     let queryDataRequestGetUrl = url + '/HomePage/Home/QueryData'
-    let options
+    let data
     axios.post(queryDataRequestGetUrl, params).then((res) => {
-        options = res.data.data.options
+        data = res.data.data
+        data["label"] = postcodes[data["location"]]
+        if(data["children"]){
+            data["children"].forEach(c=>{
+                c["label"] = postcodes[c["location"]]
+                c["value"] = c["location"]
+                if(c["children"]){
+                    c["children"].forEach(cc=>{
+                        cc["label"] = postcodes[cc["location"]]
+                        cc["value"] = cc["location"]
+                    })
+                }
+            })
+        }
+        console.log("op:", data)
+        console.log(postcodes[data["location"]])
     }).catch((err) => {
         console.log(err)
     }).finally(() => {
-        obj.options = options
+        obj.options = [data]
     })
 }

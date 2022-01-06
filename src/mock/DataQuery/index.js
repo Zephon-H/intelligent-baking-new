@@ -1,15 +1,15 @@
 import Mock from 'mockjs'
 
 let params = Mock.mock({ // 数据池
-    options: [{
-        value: '650000',
-        label: '云南省',
+
+        location: '650000',
+        // label: '云南省',
         children: [{
-            value: '650100',
-            label: '昆明市',
+            location: '650100',
+            // label: '昆明市',
             children: [{
-                value: '654100',
-                label: '东川区',
+                location: '654100',
+                // label: '东川区',
                 children: [{
                     value: '10001',
                     label: '设备1'
@@ -19,21 +19,21 @@ let params = Mock.mock({ // 数据池
                 }
                 ]
             }, {
-                value: '650300',
+                location: '650300',
                 label: '安宁市'
             }, {
-                value: '650032',
+                location: '650032',
                 label: '西山区'
             }]
         }, {
-            value: '674100',
-            label: '丽江市',
+            location: '674100',
+            // label: '丽江市',
             children: [ {
-                value: '674201',
-                label: '永胜县'
+                location: '674201',
+                // label: '永胜县'
             }]
         }]
-    }]
+
 })
 
 let deviceDataDetail = Mock.mock({
