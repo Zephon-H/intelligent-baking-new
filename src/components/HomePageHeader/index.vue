@@ -5,24 +5,34 @@
     </div>
     <div class="selector-container">
       <div style="font-size: 1.1rem">时间选择：</div>
-      <el-select  v-model="timeValue.startTime" @change="changeSelection">
-        <el-option
-            v-for="item in options"
-            :key="item"
-            :label="item"
-            :value="item"
-        >
-        </el-option>
-      </el-select>
-      <el-select v-model="timeValue.endTime" @change="changeSelection">
-        <el-option
-            v-for="item in options"
-            :key="item"
-            :label="item"
-            :value="item"
-        >
-        </el-option>
-      </el-select>
+      <div class="block">
+        <el-date-picker
+            v-model="timeValue"
+            @change="timeValueChange"
+            type="datetimerange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期">
+        </el-date-picker>
+      </div>
+<!--      <el-select  v-model="timeValue.startTime" @change="changeSelection">-->
+<!--        <el-option-->
+<!--            v-for="item in options"-->
+<!--            :key="item"-->
+<!--            :label="item"-->
+<!--            :value="item"-->
+<!--        >-->
+<!--        </el-option>-->
+<!--      </el-select>-->
+<!--      <el-select v-model="timeValue.endTime" @change="changeSelection">-->
+<!--        <el-option-->
+<!--            v-for="item in options"-->
+<!--            :key="item"-->
+<!--            :label="item"-->
+<!--            :value="item"-->
+<!--        >-->
+<!--        </el-option>-->
+<!--      </el-select>-->
     </div>
     <router-link @click.native="quit()" to="/LoginPage"  class="header-text-quit">退出</router-link>
   </div>
@@ -41,7 +51,7 @@ export default {
     }
   },
   mounted() {
-    this.initOptions()
+    // this.initOptions()
   },
   computed: {
     ...mapState(['homePageTimeValue', 'user']) //Vuex引入homePageTimeValue变量
@@ -59,19 +69,19 @@ export default {
       console.log("storage:", localStorage)
       this.$router.push('/LoginPage')
     },
-    initOptions() {
-      this.options = ["1d", "2d", "3d", "4d", "5d", "6d", "7d", "8d", "9d", "10d", "11d", "12d"]
-    },
-    changeSelection(val) {
-      val
-      let start = parseInt(this.timeValue.startTime)
-      let end = parseInt(this.timeValue.endTime)
-      if (start < end) {
-        console.log("timeValue", this.timeValue)
-      }else{
-        this.timeValue.startTime = "1d"
-      }
-    }
+    // initOptions() {
+    //   this.options = ["1d", "2d", "3d", "4d", "5d", "6d", "7d", "8d", "9d", "10d", "11d", "12d"]
+    // },
+    // changeSelection(val) {
+    //   val
+    //   let start = parseInt(this.timeValue.startTime)
+    //   let end = parseInt(this.timeValue.endTime)
+    //   if (start < end) {
+    //     console.log("timeValue", this.timeValue)
+    //   }else{
+    //     this.timeValue.startTime = "1d"
+    //   }
+    // }
   }
 }
 </script>

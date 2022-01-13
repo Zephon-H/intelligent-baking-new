@@ -13,6 +13,7 @@ import {getChinaJson, getProvinceJSON, getCityJSON, getMapData} from "@/api/get-
 import {cityProvincesMap} from '@/config/cityProvincesMap'
 import {mapOption} from '@/config/mapOption'
 import {mapState} from "vuex";
+
 const postcodes = require("/public/static/map/postcode.json")
 
 export default {
@@ -35,7 +36,7 @@ export default {
       areaCode: '530000', // 当前行政区划
       areaLevel: 'city', // 当前级别
       timeValue: this.$store.state.homePageTimeValue,
-      deviceData: [],
+      deviceData: {},
       position2postcode: {}
     }
   },
@@ -59,6 +60,20 @@ export default {
     }
   },
   methods: {
+    formatDateTime(date) {
+      var y = date.getFullYear();
+      var m = date.getMonth() + 1;
+      m = m < 10 ? ('0' + m) : m;
+      var d = date.getDate();
+      d = d < 10 ? ('0' + d) : d;
+      var h = date.getHours();
+      h=h < 10 ? ('0' + h) : h;
+      var minute = date.getMinutes();
+      minute = minute < 10 ? ('0' + minute) : minute;
+      var second=date.getSeconds();
+      second=second < 10 ? ('0' + second) : second;
+      return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;
+    },
     // 初次加载绘制地图
     initEcharts() {
       // if (this.areaCode === '000000') {
@@ -100,9 +115,9 @@ export default {
     //绘制全国地图
     requestGetChinaJson() {
       let p = {
-        areaCode: "000000",
-        startTime: this.timeValue[0],
-        endTime: this.timeValue[1],
+        // areaCode: "000000",
+        "start_time": this.timeValue[0],
+        "end_time": this.timeValue[1],
       }
       getMapData(p).then(r => {
         let hasDeviceData = r.data
@@ -142,18 +157,46 @@ export default {
 // 加载省级地图
     requestGetProvinceJSON(params) {
       let p = {
-        areaCode: params.areaCode,
-        startTime: this.timeValue.startTime,
-        endTime: this.timeValue.endTime,
+        // areaCode: params.areaCode,
+        "start_time": this.formatDateTime(this.timeValue[0]),
+        "end_time": this.formatDateTime(this.timeValue[1]),
       }
       getMapData(p).then(r => {
-        this.deviceData = r.data
+        let tempData = {}
+        r.data.forEach(t => {
+          // eslint-disable-next-line no-prototype-builtins
+          // eslint-disable-next-line no-prototype-builtins
+          if (!tempData.hasOwnProperty(t.location)) {
+            tempData[t.location] = [t.equipment_No]
+          } else {
+            if (tempData[t.location].indexOf(t.equipment_No) === -1) {
+              tempData[t.location].push(t.equipment_No)
+            }
+          }
+        })
+        this.deviceData = {
+          "children":[]
+        }
+        for(let k in tempData){
+          this.deviceData["children"].push(
+              {
+                "location":k,
+                "device_number":tempData[k].length
+              }
+          )
+        }
+
+        console.log("t", this.deviceData)
+        // this.deviceData = r.data
         let hasDeviceData = this.deviceData
         let t = {}
-        hasDeviceData["children"].forEach(child=> {
+        hasDeviceData["children"].forEach(child => {
           t[String(postcodes[child.location])] = {"total": child["device_number"]}
           this.position2postcode[postcodes[child.location]] = child.location
         })
+        console.log(this.deviceData["children"][0]["location"])
+        console.log(postcodes[this.deviceData["children"][0]["location"]])
+        console.log(t)
         hasDeviceData = t
         getProvinceJSON(params.areaCode).then(res => {
           this.$echarts.registerMap(params.areaName, res);
@@ -190,24 +233,24 @@ export default {
       this.areaLevel = params.areaLevel;
       let hasDeviceData = {}
       let currPostcode = this.position2postcode[params.areaName]
-      this.deviceData.children.forEach(c =>{
-        if(c.location===currPostcode){
-          if(!c.children){
+      this.deviceData.children.forEach(c => {
+        if (c.location === currPostcode) {
+          if (!c.children) {
             hasDeviceData = null
             return
           }
           c.children.forEach(cc => {
-            hasDeviceData[String(postcodes[cc.location])]={"total": cc["device_number"]}
+            hasDeviceData[String(postcodes[cc.location])] = {"total": cc["device_number"]}
           })
         }
       })
       console.log(hasDeviceData)
-        // let t = {}
-        // hasDeviceData["children"].forEach(child=>{
-        //   t[String(postcodes[child.location])]={"total": child["device_number"]}}
-        // )
-        // hasDeviceData = t
-      if(hasDeviceData) {
+      // let t = {}
+      // hasDeviceData["children"].forEach(child=>{
+      //   t[String(postcodes[child.location])]={"total": child["device_number"]}}
+      // )
+      // hasDeviceData = t
+      if (hasDeviceData) {
         getCityJSON(params.areaCode).then(res => {
           this.$echarts.registerMap(params.areaName, res);
           let arr = [];

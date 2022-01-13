@@ -7,7 +7,7 @@
     </div>
     <div class="data-right">
     <el-table class="list"
-              :data="dataList"
+              :data="showDataList"
               height="100%"
               stripe
               style="width: 100%"
@@ -49,11 +49,16 @@ export default {
       value: '',
       search: '',
       currentPage: 1,
+      totalPages:1,
+      pageSize: 10,
       dataList: [],
+      showDataList: []
     }
   },
   methods: {
     setDeviceDataOption(temperature1, temperature2, humidity1, humidity2, date) {
+      console.log("newData")
+      this.dataList = []
       for (let i in date) {
         this.dataList.push(
             {
@@ -65,11 +70,54 @@ export default {
             }
         )
       }
+      this.showDataList = this.dataList.slice(0, this.pageSize)
+      this.totalPages=this.dataList.length % 20 === 0?(this.dataList.length/this.pageSize):(Math.floor(this.dataList.length)/this.pageSize+1)
+    },
+    formatDateTime(date) {
+      var y = date.getFullYear();
+      var m = date.getMonth() + 1;
+      m = m < 10 ? ('0' + m) : m;
+      var d = date.getDate();
+      d = d < 10 ? ('0' + d) : d;
+      var h = date.getHours();
+      h=h < 10 ? ('0' + h) : h;
+      var minute = date.getMinutes();
+      minute = minute < 10 ? ('0' + minute) : minute;
+      var second=date.getSeconds();
+      second=second < 10 ? ('0' + second) : second;
+      return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;
     }
   },
   mounted() {
     document.body.style.overflow = "hidden";
-    deviceTemperatureHumidDataRequest(this)
+    let dom = document.querySelector(".el-table__body-wrapper");
+    dom.addEventListener("scroll", (v) => {
+      v
+      const scrollDistance =
+          dom.scrollHeight - dom.scrollTop - dom.clientHeight;
+      if (scrollDistance <= 0) {
+        //等于0证明已经到底，可以请求接口
+        if (this.currentPage >= this.totalPages) {
+          //判断是否到达底部
+          this.$message.warning("没有更多数据");
+        }
+        if (this.currentPage < this.totalPages) {
+          //当前页数小于总页数就请求
+          this.currentPage++; //当前页数自增
+          console.log("页面已经到达底部可以请求接口...", this.currentPage);
+          //this.getData();
+          this.showDataList = this.showDataList.concat(this.dataList.slice(this.currentPage*this.pageSize, this.currentPage*(this.pageSize+1)-1))
+        }
+      }
+    });
+  },
+  created() {
+    let d = {
+      "startTime": this.formatDateTime(this.$store.state.homePageTimeValue[0]),
+      "endTime": this.formatDateTime(this.$store.state.homePageTimeValue[1])
+    }
+    console.log("d", d)
+    deviceTemperatureHumidDataRequest(this, d)
   },
   destroyed() {
     document.body.style.overflow = "visible";
@@ -80,15 +128,15 @@ export default {
   props: ['change', 'searchData'],
   watch: {
     change: function (val) {
+      val
       // let timeValue = this.$store.state.homePageTimeValue
-      console.log("searchData", this.searchData)
       // this.searchData = {
       //   startTime: timeValue[0],
       //   endTime: timeValue[1],
       //   deviceID: this.deviceID
       // }
       this.dataList = []
-      deviceTemperatureHumidDataRequest(this, val)
+      deviceTemperatureHumidDataRequest(this, this.searchData)
     }
   }
 }

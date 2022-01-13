@@ -482,7 +482,11 @@ export default {
     /*
     * 页面挂载发起一次数据监测数据请求并开启定时器
     * */
-    deviceTemperatureHumidDataRequest(this)
+    let d = {
+      "startTime": this.formatDateTime(this.$store.state.homePageTimeValue[0]),
+      "endTime": this.formatDateTime(this.$store.state.homePageTimeValue[1])
+    }
+    deviceTemperatureHumidDataRequest(this, d)
     // dataMonitoringRequest(this)
     // this.delay = setInterval(() => {
     //   dataMonitoringRequest(this)
@@ -493,6 +497,20 @@ export default {
     clearInterval(this.delay)
   },
   methods: {
+    formatDateTime(date) {
+      var y = date.getFullYear();
+      var m = date.getMonth() + 1;
+      m = m < 10 ? ('0' + m) : m;
+      var d = date.getDate();
+      d = d < 10 ? ('0' + d) : d;
+      var h = date.getHours();
+      h=h < 10 ? ('0' + h) : h;
+      var minute = date.getMinutes();
+      minute = minute < 10 ? ('0' + minute) : minute;
+      var second=date.getSeconds();
+      second=second < 10 ? ('0' + second) : second;
+      return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;
+    },
     //图表响应式处理（未启用）
     resizeHandle() {
       let myChart1=this.$echarts.init(document.getElementById('home-temperature-data-monitoring'))

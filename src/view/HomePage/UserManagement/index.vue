@@ -8,7 +8,9 @@
           <el-tab-pane label="修改信息">
             <UserManagement/>
           </el-tab-pane>
-          <el-tab-pane label="修改密码">配置管理</el-tab-pane>
+          <el-tab-pane label="修改密码">
+            <Password/>
+          </el-tab-pane>
         </el-tabs>
 <!--        <Personal1/>-->
 <!--&lt;!&ndash;        <Manage v-if="this.jurisdiction==0" />&ndash;&gt;-->
@@ -24,9 +26,11 @@
 // import Pwd from '@/components/UserManagement/Pwd'
 import UserManagement from "@/components/UserManagement/UserManagement";
 import Personal from "@/components/UserManagement/Personal";
+import Password from "../../../components/UserManagement/Password";
 export default {
   name: "index",
   components:{
+    Password,
     UserManagement,
     // Manage,
     Personal,

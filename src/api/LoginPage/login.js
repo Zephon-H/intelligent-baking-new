@@ -3,34 +3,31 @@ import axios from  'axios'
 //登录请求  请求成功保存用户信息到localstorge
 export function loginRequest(obj){
     let requestUrl=url+'/LoginPage/Login'
+    let getUserUrl = url + "/LoginPage/find_by_token"
     console.log(requestUrl)
     let post={
-        user:obj.userName,
-        pwd:obj.password
+        user_id:obj.userId,
+        password:obj.password
     }
     let bool
-    let user={
-        id:'',
-        gender:'',
-        name:'',
-        nname:'',
-        phone:'',
-    }
     axios.post(requestUrl,post).then((res)=>{
         console.log(res.data)
-        res.data = res.data.data
-        bool=res.data.identify
-        user.id=res.data.user
-        user.gender=res.data.gender
-        user.name=res.data.name
-        user.nname=res.data.nname
-        user.phone=res.data.phone
-        localStorage.setItem('token',res.data.token)
-        localStorage.setItem('user',JSON.stringify(user))
+        let token = res.data.data
+        let user = null
+        axios.get(getUserUrl+"?user_id="+obj.user_id,{headers:{token}}).then(r=>{
+            console.log(r.data)
+            user = r.data.data
+            bool = res.data.code === 200
+            console.log(user)
+            localStorage.setItem('token',token)
+            localStorage.setItem('user',JSON.stringify(user))
+        }).catch(err=>{
+            console.log(err)
+        }).finally(()=>{
+            console.log(bool)
+            obj.login(bool)
+        })
     }).catch((err)=>{
         console.log(err)
-    }).finally(()=>{
-        console.log(bool)
-        obj.login(bool)
     })
 }

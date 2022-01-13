@@ -20,8 +20,8 @@ export function changeUserInfo(obj, id, user) {
     let data = {id, user}
     let bool, errmsg = ''
     axios.post(reqUrl, data).then((res) => {
-        res.data = res.data.data // 修改
-        bool = res.data.identify
+        console.log(res.data);
+        bool = res.data.code===200
         if (!bool) {
             errmsg = res.data.errmsg
         }
@@ -69,8 +69,8 @@ export function changeUserPwd(id, newPwd) {
     let reqUrl = url + '/HomePage/UserManagement/Pwd'
     let data = {id, newPwd}
     axios.post(reqUrl, data).then((res) => {
-        res.data = res.data.data // 修改
-        if (res.data.identify) {
+        console.log(res)
+        if (res.data.code===200) {
             alert('修改成功')
         } else {
             alert('修改失败!' + res.data.errmsg)

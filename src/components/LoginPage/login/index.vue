@@ -9,7 +9,7 @@
       </div>
       <div class="login-id-container">
 <!--        <img src="../../../assets/img/login_people.svg" alt="" class="login-id-icon">-->
-        <input class="login-input" type="text" placeholder="请输入您的用户名" v-model="userName">
+        <input class="login-input" type="text" placeholder="请输入您的用户编号" v-model="userId">
       </div>
       <div class="login-password-container">
 <!--        <img src="../../../assets/img/login_password.svg" alt="" class="login-password-icon">-->
@@ -30,7 +30,7 @@ export default {
   data() {
     return {
       //用户名
-      userName: '',
+      userId: '',
       //密码
       password: ''
     }
@@ -45,7 +45,7 @@ export default {
         if (bool) {
           this.$router.push('/HomePage/Home')
         } else {
-          alert('用户名或者密码错误！')
+          this.$message.error('用户名或者密码错误');
         }
       },100)
     },

@@ -3,23 +3,18 @@ import axios from 'axios'
 //注册请求
 export function registerRequest(obj){
     let requestUrl=url+'/LoginPage/Register'
-    let errmsg
     let post={
-        user:obj.user,
-        pwd:obj.pwd,
-        name:obj.name,
-        nname:obj.nname,
-        number:obj.phoneNumber,
-        gender:obj.gender
+        nname: obj.nname.value,
+        user_id:obj.user_id.value,
+        password:obj.password.value,
+        phone: obj.phone.value,
     }
     let bool
     axios.post(requestUrl,post).then((res)=>{
-        res.data = res.data.data // 改
-        bool=res.data.identify
-        errmsg=res.data.errmsg
+        bool=res.data.code===200
     }).catch((err)=>{
         console.log(err)
     }).finally(()=>{
-        obj.register(bool,errmsg)
+        obj.register(bool)
     })
 }

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import qs from 'qs'
+// import qs from 'qs'
 // import da from "element-ui/src/locale/lang/da";
 // import manage from './manage.js'
 // axios.defaults.baseURL = manage.apiHost;
@@ -35,12 +35,13 @@ axios.interceptors.request.use(
     config => {
         // config.headers['X-Requested-With'] = 'XMLHttpRequest'
         // config.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
-        // config.headers['Content-Type'] = 'application/json; charset=UTF-8';
+        config.headers['Content-Type'] = 'application/json; charset=UTF-8';
         // config.data = qs.stringify(manage.data)
         // config.headers['Content-Type'] = 'application/json; charset=UTF-8';
         // config.headers['Authorization'] = getToken() ? getToken() : null;
         // manage.headers['X-CSRFToken'] = sessionStorage.getItem('csrftoken');
         // config.headers['Cookie'] = 'Hm_lvt_b0668f30d62e1597bdb36d05edea8960=1604221499,1604560772,1604655241; Hm_lpvt_b0668f30d62e1597bdb36d05edea8960=1604911501; sid=f2295ce4-5905-47d2-b119-9747e7749674';
+        config.headers["token"] = localStorage.getItem("token")
         return config;
     },
     error => {
@@ -80,8 +81,7 @@ export function delet(url, params) {
 }
 
 export function post(url, data, config) {
-    console.log(url, data)
-    return axios.post(url, qs.stringify(data), config).then(checkStatus);
+    return axios.post(url, data, config).then(checkStatus);
 }
 
 export function postDefine(url, data, config) {

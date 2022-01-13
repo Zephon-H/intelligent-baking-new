@@ -35,16 +35,37 @@ export function deviceMonitoringRequest(obj) {
 
 //首页数据监测数据请求 用到
 export function dataMonitoringRequest(obj, params) {
-    // console.log("param",params)
-    let dataMonitoringRequestUrl = url + '/HomePage/Home/DeviceData'
+    console.log("param", params)
+    // let dataMonitoringRequestUrl = url + '/HomePage/Home/DeviceData'
+    let dataMonitoringRequestUrl = url + '/api/query/detailRoastedTobacco'
     let runningDevice = [], abnormalDevice = [], time = []
     request.post(dataMonitoringRequestUrl, params).then(res => {
-        runningDevice = res.data.runningDevice
+        console.log("monitor", res.data)
+        let t = {}
+        // 前端计算太慢
+        res.data.forEach(r =>{
+            let st = r["produce_date"]
+            st = st.substring(0, st.length - 5) + "00:00"
+            // eslint-disable-next-line no-prototype-builtins
+            if(t.hasOwnProperty(st)){
+                t[st].add(r.equipment_No)
+            }else{
+                t[st] = new Set()
+                t[st].add(r.equipment_No)
+            }
+        })
+        console.log("temp", t)
+        for(let k in t){
+            runningDevice.push(t[k].size)
+            time.push(k)
+        }
+        console.log(runningDevice)
+        // runningDevice = res.data.runningDevice
         abnormalDevice = res.data.abnormalDevice
-        time = res.data.run_time
-    }).catch(err =>{
+        // time = res.data.run_time
+    }).catch(err => {
         console.log(err)
-    }).finally(()=>{
+    }).finally(() => {
         obj.setDataDeviceOption(runningDevice, abnormalDevice, time)
     })
 
@@ -96,28 +117,55 @@ export function dataMonitoringRequest(obj, params) {
 }
 
 // 用到
-export function deviceTemperatureHumidDataRequest(obj, params){
+export function deviceTemperatureHumidDataRequest(obj, params) {
     // console.log("param",params)
-    console.log("条件查找，请求参数需替换", params);
-    let p = params
+    console.log("条件查找");
+    console.log(params)
+    if(params["startTime"]==null)return
+    let p = {
+        "start_time": params["startTime"],
+        "end_time": params["endTime"]
+    }
+    if(params["dryBallTemp"]!=null && params["dryBallTemp"][0]!==""){
+        p["dry_ball_Temp"] = params["dryBallTemp"][0]
+    }
+    if(params["dryBallTarget"]!=null && params["dryBallTarget"][0]!==""){
+        p["dryBallTarget"] = params["dryBallTarget"][0]
+    }
+    if(params["wetBallTemp"]!=null && params["wetBallTemp"][0]!==""){
+        p["wetBallTemp"] = params["wetBallTemp"][0]
+    }
+    if(params["wetBallTarget"]!=null && params["wetBallTarget"][0]!==""){
+        p["wetBallTarget"] = params["wetBallTarget"][0]
+    }
     // let p = {
     //     deviceId: 0
     //     // startTime: params[0],
     //     // endTime: params[1],
     //     // deviceId: params[2],
     // }
-    let dataDeviceDetailRequestUrl = url + '/HomePage/Home/DeviceDataDetail'
+    // let dataDeviceDetailRequestUrl = url + '/HomePage/Home/DeviceDataDetail'
+    let dataDeviceDetailRequestUrl = url + '/api/query/detailRoastedTobacco'
     let temperature1 = [], temperature2 = [], humidity1 = [], humidity2 = [], run_time = []
     request.post(dataDeviceDetailRequestUrl, p).then(res => {
-        temperature1 = res.data.dryBallTemp
-        temperature2 = res.data.dryBallTempTarget
-        humidity1 = res.data.wetBallTemp
-        humidity2 = res.data.wetBallTempTarget
-        run_time = res.data.run_time
-    }).catch(err =>{
+        // temperature1 = res.data.dryBallTemp
+        // temperature2 = res.data.dryBallTempTarget
+        // humidity1 = res.data.wetBallTemp
+        // humidity2 = res.data.wetBallTempTarget
+        // run_time = res.data.run_time
+        console.log(res.data)
+        temperature1 = [],temperature2 = [], humidity1 = [], humidity2 = [], run_time = []
+        res.data.forEach(r => {
+            temperature1.push(r["dryBallTemp"])
+            temperature2.push(r["dryBallTarget"])
+            humidity1.push(r["wetBallTemp"])
+            humidity2.push(r["wetBallTarget"])
+            run_time.push(r["produce_date"])
+        })
+    }).catch(err => {
         console.log(err)
-    }).finally(()=>{
-        obj.setDeviceDataOption(temperature1,temperature2, humidity1, humidity2, run_time)
+    }).finally(() => {
+        obj.setDeviceDataOption(temperature1, temperature2, humidity1, humidity2, run_time)
     })
 }
 
@@ -178,19 +226,21 @@ export function deviceTemperatureHumidDataRequest(obj, params){
 // }
 //
 const postcodes = require("/public/static/map/postcode.json")
+
 export function queryDataRequest(obj, params) {
     // console.log("query", params)
     let queryDataRequestGetUrl = url + '/HomePage/Home/QueryData'
+    // let queryDataRequestGetUrl = url + '/api/query/detailRoastedTobacco'
     let data
     axios.post(queryDataRequestGetUrl, params).then((res) => {
         data = res.data.data
         data["label"] = postcodes[data["location"]]
-        if(data["children"]){
-            data["children"].forEach(c=>{
+        if (data["children"]) {
+            data["children"].forEach(c => {
                 c["label"] = postcodes[c["location"]]
                 c["value"] = c["location"]
-                if(c["children"]){
-                    c["children"].forEach(cc=>{
+                if (c["children"]) {
+                    c["children"].forEach(cc => {
                         cc["label"] = postcodes[cc["location"]]
                         cc["value"] = cc["location"]
                     })

@@ -16,4 +16,6 @@ export const getCityJSON = (path,params) => request.get(api+`/map/city/${path}.j
 export const getWeather = (params) => request.get(`https://api.asilu.com/weather_v2/`, params);
 
 
-export const getMapData = (params) => request.post(url+`/HomePage/Home/MapData/${params['areaCode']}`, params)
+// export const getMapData = (params) => request.post(url+`/HomePage/Home/MapData/${params['areaCode']}`, params)
+
+export const getMapData = (params) => request.post(url+`/api/query/detailRoastedTobacco`, params)

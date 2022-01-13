@@ -1,7 +1,6 @@
 import Mock from 'mockjs'
 
 let params = Mock.mock({ // 数据池
-
         location: '650000',
         // label: '云南省',
         children: [{

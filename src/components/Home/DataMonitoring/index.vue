@@ -110,7 +110,7 @@ export default {
           type: 'value',
           name: '数量',
           min: 0,
-          max: 1000,
+          max: 20,
           splitNumber: 5,
           nameTextStyle: {
             color: "#A1A0AE",
@@ -361,7 +361,10 @@ export default {
           },
         ]
       },
-      timeValue: this.$store.state.homePageTimeValue,
+      timeValue: {
+        "start_time": this.formatDateTime(this.$store.state.homePageTimeValue[0]),
+        "end_time": this.formatDateTime(this.$store.state.homePageTimeValue[1])
+      },
     }
   },
   computed: {
@@ -371,7 +374,11 @@ export default {
     //监听homePageDelay（数据时延）并及时响应  关闭定时器并重新按时延开启定时器
     homePageTimeValue: {
       handler() {
-        this.timeValue = this.homePageTimeValue
+        console.log("change")
+        this.timeValue = {
+          "start_time": this.formatDateTime(this.homePageTimeValue[0]),
+          "end_time": this.formatDateTime(this.homePageTimeValue[1])
+        }
         dataMonitoringRequest(this, this.timeValue)
       },
       immediate: true,
@@ -395,6 +402,20 @@ export default {
     clearInterval(this.delay)
   },
   methods: {
+    formatDateTime(date) {
+      var y = date.getFullYear();
+      var m = date.getMonth() + 1;
+      m = m < 10 ? ('0' + m) : m;
+      var d = date.getDate();
+      d = d < 10 ? ('0' + d) : d;
+      var h = date.getHours();
+      h=h < 10 ? ('0' + h) : h;
+      var minute = date.getMinutes();
+      minute = minute < 10 ? ('0' + minute) : minute;
+      var second=date.getSeconds();
+      second=second < 10 ? ('0' + second) : second;
+      return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;
+    },
     //图表响应式处理（未启用）
     resizeHandle() {
       let myChart1=this.$echarts.init(document.getElementById('home-temperature-data-monitoring'))
@@ -405,6 +426,7 @@ export default {
       myChart3.resize()
     },
     setDataDeviceOption(runningData, abnormalData, date){
+      this.runningDeviceOption.yAxis[0].max = runningData.sort().reverse()[0]+1
       this.runningDeviceOption.xAxis[0].data = date
       this.runningDeviceOption.series[0].data = runningData
       this.abnormalDeviceOption.xAxis[0].data = date

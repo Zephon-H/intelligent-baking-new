@@ -9,16 +9,17 @@
                      :show-all-levels="false"
                      filterable></el-cascader>
         <!--        <el-input-number v-model="num" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>-->
-        <el-tooltip class="item" effect="dark" content="可输入单个数字或范围，若输入范围则用横线隔开，如10-20" placement="top">
+<!--        可输入单个数字或范围，若输入范围则用横线隔开，如10-20-->
+        <el-tooltip class="item" effect="dark" content="输入干球最大温度，可为空" placement="top">
           <el-input v-model="dryBallTemp" placeholder="干球温度"/>
         </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="可输入单个数字或范围，若输入范围则用横线隔开，如10-20" placement="top">
+        <el-tooltip class="item" effect="dark" content="输入干球最大目标，可为空" placement="top">
           <el-input v-model="dryBallTarget" placeholder="干球目标"/>
         </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="可输入单个数字或范围，若输入范围则用横线隔开，如10-20" placement="top">
+        <el-tooltip class="item" effect="dark" content="输入湿球最大温度，可为空" placement="top">
           <el-input v-model="wetBallTemp" placeholder="湿球温度"/>
         </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="可输入单个数字或范围，若输入范围则用横线隔开，如10-20" placement="top">
+        <el-tooltip class="item" effect="dark" content="输入湿球最大目标，可为空" placement="top">
           <el-input v-model="wetBallTarget" placeholder="湿球目标"/>
         </el-tooltip>
         <button class="query" @click="getData">查询</button>
@@ -88,9 +89,23 @@ export default {
         "dryBallTarget": dryBallTargetList,
         "wetBallTemp": wetBallTempList,
         "wetBallTarget": wetBallTargetList,
-        startTime: this.timeValue["startTime"],
-        endTime: this.timeValue["endTime"]
+        startTime: this.formatDateTime(this.timeValue[0]),
+        endTime: this.formatDateTime(this.timeValue[1])
       }
+    },
+    formatDateTime(date) {
+      var y = date.getFullYear();
+      var m = date.getMonth() + 1;
+      m = m < 10 ? ('0' + m) : m;
+      var d = date.getDate();
+      d = d < 10 ? ('0' + d) : d;
+      var h = date.getHours();
+      h=h < 10 ? ('0' + h) : h;
+      var minute = date.getMinutes();
+      minute = minute < 10 ? ('0' + minute) : minute;
+      var second=date.getSeconds();
+      second=second < 10 ? ('0' + second) : second;
+      return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;
     }
   },
   computed: {
@@ -112,8 +127,8 @@ export default {
   },
   mounted() {
     let params = {
-      startTime: this.timeValue[0],
-      endTime: this.timeValue[1]
+      startTime: this.formatDateTime(this.timeValue[0]),
+      endTime: this.formatDateTime(this.timeValue[1])
     }
     queryDataRequest(this, params)
   }

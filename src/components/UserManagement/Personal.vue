@@ -2,23 +2,23 @@
 
   <div>
     <div class="row" >
-      <img src="@/assets/头像.jpg" alt="用户头像" class="user-img">
-      <div class="col" style="margin:0 0 0 2rem;">
-        <div class="user-nname" style="width: 13rem">{{ user.nname }}</div>
-      </div>
-      <div class="row" style="margin-top: 2rem">
-        <div class="user-info-container col" style="width: 6rem">
+      <img :src="user.head_img" alt="用户头像" class="user-img">
+<!--      <div class="col" style="margin:0 0 0 2rem;">-->
+<!--        <div class="user-nname" style="width: 13rem">{{ user.nname }}</div>-->
+<!--      </div>-->
+      <div class="row" style="margin-top: 2rem; margin-left: 5rem">
+        <div class="user-info-container col" style="width: 10rem;">
           <div class="user-info-title">用户编号：</div>
-          <div class="user-info-text">{{ user.id }}</div>
+          <div class="user-info-text">{{ user.user_id }}</div>
         </div>
-        <div class="user-info-container col" style="width: 6rem">
-          <div class="user-info-title">姓名：</div>
-          <div class="user-info-text">{{ user.name }}</div>
+        <div class="user-info-container col" style="width: 10rem">
+          <div class="user-info-title">用户昵称：</div>
+          <div class="user-info-text">{{ user.nname }}</div>
         </div>
-        <div class="user-info-container col" style="width: 6rem">
-          <div class="user-info-title">性别：</div>
-          <div class="user-info-text">{{ user.gender }}</div>
-        </div>
+<!--        <div class="user-info-container col" style="width: 6rem">-->
+<!--          <div class="user-info-title">性别：</div>-->
+<!--          <div class="user-info-text">{{ user.gender }}</div>-->
+<!--        </div>-->
         <div class="user-info-container col" style="width: 6rem">
           <div class="user-info-title">手机号：</div>
           <div class="user-info-text">{{ user.phone }}</div>
