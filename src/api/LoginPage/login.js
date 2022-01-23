@@ -14,12 +14,13 @@ export function loginRequest(obj){
         console.log(res.data)
         let token = res.data.data
         let user = null
-        axios.get(getUserUrl+"?user_id="+obj.user_id,{headers:{token}}).then(r=>{
+        localStorage.setItem('token',token)
+        axios.get(getUserUrl+"?user_id="+obj.userId).then(r=>{
             console.log(r.data)
             user = r.data.data
-            bool = res.data.code === 200
+            bool = r.data.code === 200
+            console.log(bool)
             console.log(user)
-            localStorage.setItem('token',token)
             localStorage.setItem('user',JSON.stringify(user))
         }).catch(err=>{
             console.log(err)

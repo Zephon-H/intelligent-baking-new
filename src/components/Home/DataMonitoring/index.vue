@@ -430,6 +430,10 @@ export default {
       this.runningDeviceOption.xAxis[0].data = date
       this.runningDeviceOption.series[0].data = runningData
       this.abnormalDeviceOption.xAxis[0].data = date
+      abnormalData = []
+      runningData.forEach(()=>{
+        abnormalData.push(0)
+      })
       this.abnormalDeviceOption.series[0].data = abnormalData
       this.runningDeviceOption.tooltip.formatter = function (params) {
         var result = ""
