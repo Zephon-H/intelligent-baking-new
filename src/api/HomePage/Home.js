@@ -43,19 +43,19 @@ export function dataMonitoringRequest(obj, params) {
         console.log("monitor", res.data)
         let t = {}
         // 前端计算太慢
-        res.data.forEach(r =>{
+        res.data.forEach(r => {
             let st = r["produce_date"]
             st = st.substring(0, st.length - 5) + "00:00"
             // eslint-disable-next-line no-prototype-builtins
-            if(t.hasOwnProperty(st)){
+            if (t.hasOwnProperty(st)) {
                 t[st].add(r.equipment_No)
-            }else{
+            } else {
                 t[st] = new Set()
                 t[st].add(r.equipment_No)
             }
         })
         console.log("temp", t)
-        for(let k in t){
+        for (let k in t) {
             runningDevice.push(t[k].size)
             time.push(k)
         }
@@ -121,21 +121,26 @@ export function deviceTemperatureHumidDataRequest(obj, params) {
     // console.log("param",params)
     console.log("条件查找");
     console.log(params)
-    if(params["startTime"]==null)return
+    if (params["startTime"] == null || params["location"] == null) return
     let p = {
+        "location": params["location"],
+        "equipment_No": params["equipment_No"],
         "start_time": params["startTime"],
         "end_time": params["endTime"]
     }
-    if(params["dryBallTemp"]!=null && params["dryBallTemp"][0]!==""){
+    if (params["dryBallTemp"] != null && params["dryBallTemp"][0] !== "") {
         p["dry_ball_Temp"] = params["dryBallTemp"][0]
     }
-    if(params["dryBallTarget"]!=null && params["dryBallTarget"][0]!==""){
+    if (params["dryBallTemp"] != null && params["dryBallTemp"][0] !== "") {
+        p["dry_ball_Temp"] = params["dryBallTemp"][0]
+    }
+    if (params["dryBallTarget"] != null && params["dryBallTarget"][0] !== "") {
         p["dryBallTarget"] = params["dryBallTarget"][0]
     }
-    if(params["wetBallTemp"]!=null && params["wetBallTemp"][0]!==""){
+    if (params["wetBallTemp"] != null && params["wetBallTemp"][0] !== "") {
         p["wetBallTemp"] = params["wetBallTemp"][0]
     }
-    if(params["wetBallTarget"]!=null && params["wetBallTarget"][0]!==""){
+    if (params["wetBallTarget"] != null && params["wetBallTarget"][0] !== "") {
         p["wetBallTarget"] = params["wetBallTarget"][0]
     }
     // let p = {
@@ -154,7 +159,7 @@ export function deviceTemperatureHumidDataRequest(obj, params) {
         // humidity2 = res.data.wetBallTempTarget
         // run_time = res.data.run_time
         console.log(res.data)
-        temperature1 = [],temperature2 = [], humidity1 = [], humidity2 = [], run_time = []
+        temperature1 = [], temperature2 = [], humidity1 = [], humidity2 = [], run_time = []
         res.data.forEach(r => {
             temperature1.push(r["dryBallTemp"])
             temperature2.push(r["dryBallTarget"])
@@ -229,29 +234,58 @@ const postcodes = require("/public/static/map/postcode.json")
 
 export function queryDataRequest(obj, params) {
     // console.log("query", params)
-    let queryDataRequestGetUrl = url + '/HomePage/Home/QueryData'
-    // let queryDataRequestGetUrl = url + '/api/query/detailRoastedTobacco'
-    let data
+    // let queryDataRequestGetUrl = url + '/HomePage/Home/QueryData'
+    let queryDataRequestGetUrl = url + '/api/query/detailRoastedTobacco'
+    let outputdata = []
     axios.post(queryDataRequestGetUrl, params).then((res) => {
-        data = res.data.data
-        data["label"] = postcodes[data["location"]]
-        if (data["children"]) {
-            data["children"].forEach(c => {
-                c["label"] = postcodes[c["location"]]
-                c["value"] = c["location"]
-                if (c["children"]) {
-                    c["children"].forEach(cc => {
-                        cc["label"] = postcodes[cc["location"]]
-                        cc["value"] = cc["location"]
-                    })
-                }
+        let data = res.data.data
+        // console.log('dddd', data)
+        let tempLocation = {}
+        data.forEach(d => {
+            // eslint-disable-next-line no-prototype-builtins
+            if (tempLocation.hasOwnProperty(d.location)) {
+                tempLocation[d.location].add(d.equipment_No)
+            } else {
+                tempLocation[d.location] = new Set()
+            }
+            // outdata["label"] = postcodes[d.location]
+            // outdata["value"] = d.location
+            // outdata["children"] = []
+        })
+        for (let k in tempLocation) {
+            console.log(k, tempLocation[k])
+            outputdata.push({
+                "label": postcodes[k],
+                "value": k,
             })
+            let tempchild = []
+            tempLocation[k].forEach(t=>{
+                tempchild.push({
+                    "label":t,
+                    "value":t
+                })
+            })
+            outputdata[outputdata.length-1]["children"] = tempchild
         }
-        console.log("op:", data)
-        console.log(postcodes[data["location"]])
+        console.log("da...", outputdata)
+        // data["label"] = postcodes[data["location"]]
+        // if (data["children"]) {
+        //     data["children"].forEach(c => {
+        //         c["label"] = postcodes[c["location"]]
+        //         c["value"] = c["location"]
+        //         if (c["children"]) {
+        //             c["children"].forEach(cc => {
+        //                 cc["label"] = postcodes[cc["location"]]
+        //                 cc["value"] = cc["location"]
+        //             })
+        //         }
+        //     })
+        // }
+        // console.log("op:", data)
+        // console.log(postcodes[data["location"]])
     }).catch((err) => {
         console.log(err)
     }).finally(() => {
-        obj.options = [data]
+        obj.options = outputdata
     })
 }

@@ -9,7 +9,7 @@
                      :show-all-levels="false"
                      filterable></el-cascader>
         <!--        <el-input-number v-model="num" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>-->
-<!--        可输入单个数字或范围，若输入范围则用横线隔开，如10-20-->
+        <!--        可输入单个数字或范围，若输入范围则用横线隔开，如10-20-->
         <el-tooltip class="item" effect="dark" content="输入干球最大温度，可为空" placement="top">
           <el-input v-model="dryBallTemp" placeholder="干球温度"/>
         </el-tooltip>
@@ -45,6 +45,7 @@ export default {
       value: [],
       options: [],
       change: 1,
+      location: "",
       deviceID: "0",
       timeValue: this.$store.state.homePageTimeValue,
       wetBallTarget: "",
@@ -57,6 +58,7 @@ export default {
   methods: {
     getData() {
       this.change = -this.change
+      this.location = this.value[this.value.length - 2]
       this.deviceID = this.value[this.value.length - 1]
       // alert("搜索")
       let dryBallTempList = []
@@ -83,7 +85,9 @@ export default {
       } else {
         wetBallTargetList = [this.wetBallTarget, this.wetBallTarget]
       }
+      console.log(this.deviceID)
       this.searchData = {
+        "location": this.location,
         "equipment_No": this.deviceID,
         "dryBallTemp": dryBallTempList,
         "dryBallTarget": dryBallTargetList,
@@ -100,12 +104,12 @@ export default {
       var d = date.getDate();
       d = d < 10 ? ('0' + d) : d;
       var h = date.getHours();
-      h=h < 10 ? ('0' + h) : h;
+      h = h < 10 ? ('0' + h) : h;
       var minute = date.getMinutes();
       minute = minute < 10 ? ('0' + minute) : minute;
-      var second=date.getSeconds();
-      second=second < 10 ? ('0' + second) : second;
-      return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;
+      var second = date.getSeconds();
+      second = second < 10 ? ('0' + second) : second;
+      return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
     }
   },
   computed: {
@@ -115,11 +119,12 @@ export default {
     homePageTimeValue: {
       handler() {
         this.timeValue = this.homePageTimeValue
-        // let params = {
-        //   startTime: this.timeValue[0],
-        //   endTime: this.timeValue[1]
-        // }
-        queryDataRequest(this, this.timeValue)
+        let params = {
+          start_time: this.formatDateTime(this.timeValue[0]),
+          end_time: this.formatDateTime(this.timeValue[1])
+        }
+        queryDataRequest(this, params)
+        console.log("opt", this.options)
       },
       immediate: true,
       deep: true
@@ -127,10 +132,11 @@ export default {
   },
   mounted() {
     let params = {
-      startTime: this.formatDateTime(this.timeValue[0]),
-      endTime: this.formatDateTime(this.timeValue[1])
+      start_time: this.formatDateTime(this.timeValue[0]),
+      end_time: this.formatDateTime(this.timeValue[1])
     }
     queryDataRequest(this, params)
+    console.log("opt", this.options)
   }
 
 }
@@ -150,9 +156,11 @@ export default {
 .location-select {
   width: 60rem;
 }
-.item{
+
+.item {
   margin-left: 1rem;
 }
+
 .query {
   height: 40px;
   width: 50rem;
