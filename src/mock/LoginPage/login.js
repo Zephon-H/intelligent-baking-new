@@ -1,16 +1,15 @@
 import Mock from 'mockjs'
-let params =  Mock.mock({ // 数据池
-    "identify":"true",
-    "user":"10010101",
-    "gender":"男",
-    "name":"张三",
-    "nname":"华东师范大学用户",
-    "phone":"13112860101",
-    "token":"token123xckjvqjwoierdslkflasdlfaooqrwe"
-})
+let params =  Mock.mock(
+    "ecnueyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlY251IiwiaGVhZF9pbWciOiJodHRwczovL3hkLXZpZGVvLXBjLWltZy5vc3MtY24tYmVpamluZy5hbGl5dW5jcy5jb20veGRjbGFzc19wcm8vZGVmYXVsdC9oZWFkX2ltZy8xNC5qcGVnIiwiaWQiOiJ0ZXN0dHR0Iiwibm5hbWUiOiJ0ZXN0dHR0IiwicGhvbmUiOiIxMzIxMTIyMzMxMSIsImlhdCI6MTY0NzM5NTYzOCwiZXhwIjoxNjQ4MDAwNDM4fQ"
+)
 
 let token = Mock.mock({
-    "identify":true,
+        "category": "1",
+        "create_time": "2022-01-13 13:55:50",
+        "head_img": "https://xd-video-pc-img.oss-cn-beijing.aliyuncs.com/xdclass_pro/default/head_img/14.jpeg",
+        "nname": "testttt",
+        "phone": "13211223311",
+        "user_id": "testttt",
 })
 
 let registRes = Mock.mock({
@@ -22,7 +21,7 @@ export default {
         code: 200,
         data: params
     }),
-    tokenCertify: () => ({
+    findByToken: () => ({
         code: 200,
         data: token,
     }),

@@ -81,7 +81,6 @@ export default {
       // } else {
       if (document.getElementById("map")) {
         //地图容器
-        console.log(document.getElementById("map"))
         this.chart = this.$echarts.init(document.getElementById('map'));
       }
       this.requestGetProvinceJSON({areaName: this.areaName, areaCode: this.areaCode})
@@ -185,8 +184,6 @@ export default {
               }
           )
         }
-
-        console.log("t", this.deviceData)
         // this.deviceData = r.data
         let hasDeviceData = this.deviceData
         let t = {}
@@ -194,9 +191,6 @@ export default {
           t[String(postcodes[child.location])] = {"total": child["device_number"]}
           this.position2postcode[postcodes[child.location]] = child.location
         })
-        console.log(this.deviceData["children"][0]["location"])
-        console.log(postcodes[this.deviceData["children"][0]["location"]])
-        console.log(t)
         hasDeviceData = t
         getProvinceJSON(params.areaCode).then(res => {
           this.$echarts.registerMap(params.areaName, res);
@@ -244,7 +238,6 @@ export default {
           })
         }
       })
-      console.log(hasDeviceData)
       // let t = {}
       // hasDeviceData["children"].forEach(child=>{
       //   t[String(postcodes[child.location])]={"total": child["device_number"]}}

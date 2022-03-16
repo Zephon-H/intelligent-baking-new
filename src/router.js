@@ -8,6 +8,7 @@ import Home from '@/view/HomePage/Home/index'
 import DeviceManagemnet from '@/view/HomePage/DeviceManagement/index'
 import UserManagement from '@/view/HomePage/UserManagement/index'
 import DataAnalysis from '@/view/HomePage/DataAnalysis/index'
+import IntelligentLines from "./view/HomePage/IntelligentLines";
 
 Vue.use(Router)
 const router = new Router(({
@@ -42,6 +43,10 @@ const router = new Router(({
                 requireAuth: true
             },
             children: [
+                {
+                    path: '/HomePage/Lines',
+                    component: IntelligentLines,
+                },
                 {
                     path: '/HomePage/DeviceManagement',
                     component: DeviceManagemnet,

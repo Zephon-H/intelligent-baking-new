@@ -27,20 +27,25 @@ export default {
           path: "/HomePage/DataAnalysis",
         },
         // {
-        //   name: "Grafana",
+        //   name: "IntelligentLines",
         //   src: require("../../assets/img/仪表盘.svg"),
-        //   path: "/HomePage/Grafana",
+        //   path: "/HomePage/IntelligentLines",
         // },
         // {
         //   name: "应用场景",
         //   src: require("../../assets/img/场景.svg"),
         //   path: "/HomePage/ApplicationScenarios",
         // },
-        // {
-        //   name: "设备管理",
-        //   src: require("../../assets/img/设备.svg"),
-        //   path: "/HomePage/DeviceManagement",
-        // },
+        {
+          name: "智能曲线",
+          src: require("@/assets/设备.svg"),
+          path: "/HomePage/Lines",
+        },
+        {
+          name: "数据统计",
+          src: require("@/assets/仪表盘.svg"),
+          path: "/HomePage/DeviceManagement",
+        },
         {
           name: "用户管理",
           src: require("@/assets/用户.svg"),

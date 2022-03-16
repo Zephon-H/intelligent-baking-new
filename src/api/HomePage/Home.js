@@ -35,12 +35,10 @@ export function deviceMonitoringRequest(obj) {
 
 //首页数据监测数据请求 用到
 export function dataMonitoringRequest(obj, params) {
-    console.log("param", params)
     // let dataMonitoringRequestUrl = url + '/HomePage/Home/DeviceData'
     let dataMonitoringRequestUrl = url + '/api/query/detailRoastedTobacco'
     let runningDevice = [], abnormalDevice = [], time = []
     request.post(dataMonitoringRequestUrl, params).then(res => {
-        console.log("monitor", res.data)
         let t = {}
         // 前端计算太慢
         res.data.forEach(r => {
@@ -54,12 +52,10 @@ export function dataMonitoringRequest(obj, params) {
                 t[st].add(r.equipment_No)
             }
         })
-        console.log("temp", t)
         for (let k in t) {
             runningDevice.push(t[k].size)
             time.push(k)
         }
-        console.log(runningDevice)
         // runningDevice = res.data.runningDevice
         abnormalDevice = res.data.abnormalDevice
         // time = res.data.run_time
@@ -158,7 +154,6 @@ export function deviceTemperatureHumidDataRequest(obj, params) {
         // humidity1 = res.data.wetBallTemp
         // humidity2 = res.data.wetBallTempTarget
         // run_time = res.data.run_time
-        console.log(res.data)
         temperature1 = [], temperature2 = [], humidity1 = [], humidity2 = [], run_time = []
         res.data.forEach(r => {
             temperature1.push(r["dryBallTemp"])
@@ -253,7 +248,6 @@ export function queryDataRequest(obj, params) {
             // outdata["children"] = []
         })
         for (let k in tempLocation) {
-            console.log(k, tempLocation[k])
             outputdata.push({
                 "label": postcodes[k],
                 "value": k,
@@ -267,7 +261,6 @@ export function queryDataRequest(obj, params) {
             })
             outputdata[outputdata.length-1]["children"] = tempchild
         }
-        console.log("da...", outputdata)
         // data["label"] = postcodes[data["location"]]
         // if (data["children"]) {
         //     data["children"].forEach(c => {
